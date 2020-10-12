@@ -6,14 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -44,18 +42,57 @@ public class HomeActivity extends AppCompatActivity {
     TableLayout processTable;
     CpuQueueView cpuQueueView;
     ConstraintLayout outputContainer;
-    TextView avgTurnAround;
-    TextView avgWaiting;
     Button go;
     Parcelable[] p;
     LinearLayout tr;
     List<TableRow> rows;
     Input[] input;
+    Output[] output = null;
+    TextView priority;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        initViews();
+        rows = new ArrayList<>();
+        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF" ,"LRTF" , "Priority" , "Round robin"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_textview, algoritms);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        algoClass.setAdapter(adapter);
+        execute();
+        algoClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        priority.setVisibility(View.INVISIBLE);
+                        break;
+                    case 6:
+                        setUpPriority();
+                        break;
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOuput();
+            }
+        });
+    }
+    void setUpPriority() {
+        priority.setVisibility(VISIBLE);
+    }
+    private void initViews() {
         Bundle b = getIntent().getExtras();
         p = b.getParcelableArray("input");
         input = toInputObject(p);
@@ -66,88 +103,41 @@ public class HomeActivity extends AppCompatActivity {
         cpuQueueView = findViewById(R.id.cpu_queue);
         tr = findViewById(R.id.sum_row);
         outputContainer = findViewById(R.id.outputContainer);
-        rows = new ArrayList<>();
-        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF" ,"LRTF" , "Priority" , "Round robin"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_textview, algoritms);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        algoClass.setAdapter(adapter);
-        execute();
-        go.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getOuput();
-            }
-        });
+        output=toOutputObject(p);
+        priority=findViewById(R.id.prior);
     }
+
 
     void getOuput() {
         int type = algoClass.getSelectedItemPosition();
         if (type == 0) {
             Toast.makeText(this, "Please select algorithm type", Toast.LENGTH_LONG).show();
         } else {
-            }
-        Output[] output=null;
             List<Integer> cpuQueue = null;
             switch (type) {
                 case 1:
                     FCFS fcfs = new FCFS();
                     output = fcfs.getOutput(input);
                     cpuQueue = fcfs.getCpuQueue();
-                    for (int i = 0; i < input.length; i++) {
-                        final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
-                        TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
-                        TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
-                        tat.setText(String.valueOf(output[i].getTurnAround()));
-                        wt.setText(String.valueOf(output[i].getWaiting()));
-                        tr.addView(rowView);
-                    }
+                    display_wt_tat(output);
                     break;
                 case 2:
                     SJF sjf = new SJF();
                     output = sjf.getOutput(input);
                     cpuQueue = sjf.getCpuQueue();
-                    for (int i = 0; i < input.length; i++) {
-                        final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
-                        TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
-                        TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
-                        tat.setText(String.valueOf(output[i].getTurnAround()));
-                        wt.setText(String.valueOf(output[i].getWaiting()));
-                        tr.addView(rowView);
-                    }
-                    break;
-                case 5:
-                   /* PriorityBased priority = new PriorityBased();
-
-                    else
-                        output = priority.getPreemptive(input);
-                    cpuQueue = priority.getCpuQueue();*/
+                    display_wt_tat(output);
                     break;
                 case 3:
                     SRTF srtf = new SRTF();
                     output = srtf.getOutput(input);
                     cpuQueue = srtf.getCpuQueue();
-                    for (int i = 0; i < input.length; i++) {
-                        final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
-                        TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
-                        TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
-                        tat.setText(String.valueOf(output[i].getTurnAround()));
-                        wt.setText(String.valueOf(output[i].getWaiting()));
-                        tr.addView(rowView);
-                    }
+                    display_wt_tat(output);
                     break;
                 case 4:
                     LJF ljf = new LJF();
                     output = ljf.getOutput(input);
                     cpuQueue = ljf.getCpuQueue();
-                    for (int i = 0; i < input.length; i++) {
-                        final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
-                        TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
-                        TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
-                        tat.setText(String.valueOf(output[i].getTurnAround()));
-                        wt.setText(String.valueOf(output[i].getWaiting()));
-                        tr.addView(rowView);
-                    }
+                    display_wt_tat(output);
                     break;
             }
             outputContainer.setVisibility(VISIBLE);
@@ -180,6 +170,11 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }*/
             cpuQueueView.setUp(cpuQueue, input);
+            //cpuQueueView.startAnimation((Animation)AnimationUtils.loadAnimation(this,R.anim.shake));
+            Animation a = AnimationUtils.loadAnimation(this, R.anim.shake);
+            a.reset();
+            cpuQueueView.clearAnimation();
+            cpuQueueView.startAnimation(a);
 
             /*TableRow row = (TableRow) comparisionTable.getChildAt(1);
             if (row == null) {
@@ -259,14 +254,14 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
             Toast.makeText(this,"Done",Toast.LENGTH_SHORT).show();
-            scrollView.smoothScrollTo(0,summaryTable.getTop());
-        }*/
+            scrollView.smoothScrollTo(0,summaryTable.getTop());*/
+        }
 
     }
 
     private void execute() {
         for (int i = 0; i < input.length; i++) {
-            final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
+            View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
             TextView pname = (TextView) rowView.findViewById(R.id.sum_pro);
             TextView at = (TextView) rowView.findViewById(R.id.sum_at);
             TextView bt = (TextView) rowView.findViewById(R.id.sum_bt);
@@ -288,5 +283,24 @@ public class HomeActivity extends AppCompatActivity {
             return null;
         }
         return Arrays.copyOf(p, p.length, Output[].class);
+    }
+    public void display_wt_tat(Output[] out){
+        tr.removeAllViews();
+        for (int i = 0; i < input.length; i++) {
+            final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
+            TextView pname = (TextView) rowView.findViewById(R.id.sum_pro);
+            TextView at = (TextView) rowView.findViewById(R.id.sum_at);
+            TextView bt = (TextView) rowView.findViewById(R.id.sum_bt);
+            pname.setText(input[i].getpName());
+            at.setText(String.valueOf(input[i].getaTime()));
+            bt.setText(String.valueOf(input[i].getbTime()));
+            TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
+            TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
+            TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
+            wt.setText(String.valueOf(out[i].getWaiting()));
+            tat.setText(String.valueOf(out[i].getTurnAround()));
+            ct.setText(String.valueOf(out[i].getCompletion()));
+            tr.addView(rowView);
+        }
     }
 }

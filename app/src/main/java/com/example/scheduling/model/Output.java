@@ -6,25 +6,29 @@ import android.os.Parcelable;
 public class Output implements Parcelable {
     private int turnAround;//Turn around time
     private int waiting;//Waiting time
+    private int completion;
 
     protected Output(Parcel in) {
         turnAround = in.readInt();
         waiting = in.readInt();
+        completion = in.readInt();
     }
 
     public Output() {
 
     }
 
-    public Output(int wt, int tat) {
+    public Output(int wt, int tat,int ct) {
         this.waiting = wt;
         this.turnAround = tat;
+        this.completion = ct;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(turnAround);
         dest.writeInt(waiting);
+        dest.writeInt(completion);
     }
 
     @Override
@@ -59,6 +63,13 @@ public class Output implements Parcelable {
 
     public void setWaiting(int waiting) {
         this.waiting = waiting;
+    }
+
+    public  void setCompletion(int completion){
+        this.completion = completion;
+    }
+    public int getCompletion(){
+        return completion;
     }
 
     //GET AVERAGE TURN AROUND TIME OF LIST PASSED

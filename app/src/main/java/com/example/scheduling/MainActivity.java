@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Input[] input;
     static int i = 0;
     static boolean io;
+    TableLayout proTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         timer.start();*/
-
+        proTable=findViewById(R.id.prtable);
         layoutList = findViewById(R.id.layout_list);
         s_io = findViewById(R.id.switchio);
         add = findViewById(R.id.button_add);

@@ -52,6 +52,7 @@ public class SJF {
                 out[current].setWaiting(last - input[current].getaTime());
                 last = last + input[current].getbTime();
                 out[current].setTurnAround(last - input[current].getaTime());
+                out[current].setCompletion(out[current].getTurnAround()+input[current].getaTime());
                 cpuQueue.add(last);
             } else {
                 cpuQueue.add(-1);

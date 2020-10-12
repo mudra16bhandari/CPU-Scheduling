@@ -36,6 +36,7 @@ public class FCFS {
                 last = last + input[sort[i]].getbTime();//evaluate ending time
                 tmp.setTurnAround(last - input[sort[i]].getaTime());//evaluate turn around time
                 tmp.setWaiting(tmp.getTurnAround() - input[sort[i]].getbTime());//evaluate waiting time
+                tmp.setCompletion(tmp.getTurnAround()+input[sort[i]].getaTime());
                 out[sort[i]] = tmp;
                 cpuQueue.add(last);
             }

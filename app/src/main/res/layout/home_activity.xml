@@ -13,7 +13,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_margin="20dp">
             <Spinner
                 android:id="@+id/algo_class"
                 android:layout_width="match_parent"
@@ -27,7 +29,7 @@
 
         <HorizontalScrollView
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content">
+            android:layout_width="match_parent">
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -42,13 +44,13 @@
 
                     <TextView
                         android:id="@+id/pid"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_column="1"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:layout_weight="20"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:text="PName"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"></TextView>
@@ -62,7 +64,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
                         android:text="AT"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"></TextView>
@@ -75,8 +78,23 @@
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
                         android:text="BT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/ctime"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="3"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
+                        android:text="CT"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"></TextView>
 
@@ -87,7 +105,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
                         android:text="TAT"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"></TextView>
@@ -99,18 +118,20 @@
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
                         android:text="WT"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"></TextView>
 
                     <TextView
+                        android:id="@+id/prior"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_column="5"
                         android:layout_gravity="center"
                         android:layout_weight="20"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:gravity="center"
                         android:text="Priority"
                         android:textColor="@color/colorPrimaryDark"
@@ -176,7 +197,8 @@
                 android:id="@+id/cpu_queue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:animateLayoutChanges="true"/>
         </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

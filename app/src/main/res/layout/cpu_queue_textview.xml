@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cpu"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -7,5 +8,6 @@
     android:textColor="@android:color/black"
     android:textSize="16sp"
     android:textStyle="bold"
+    android:singleLine="true"
     android:background="@drawable/data_cell">
 </TextView>

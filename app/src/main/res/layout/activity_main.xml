@@ -24,7 +24,8 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:shrinkColumns="1,2,3,5">
+            android:shrinkColumns="1,2,3,5"
+            android:id="@+id/prtable">
 
             <TableRow
                 android:layout_width="match_parent"

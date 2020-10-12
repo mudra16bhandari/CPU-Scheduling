@@ -59,6 +59,7 @@ public class SRTF {
                     last = currentEnd;
                     out[current].setTurnAround(last - inputCopy[current].getaTime());
                     out[current].setWaiting(out[current].getTurnAround() - input[current].getbTime());
+                    out[current].setCompletion(out[current].getTurnAround()+input[current].getaTime());
                     count++;
                 }
                 cpuQueue.add(last);
