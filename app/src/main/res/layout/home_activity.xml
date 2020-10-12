@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/algo_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/algo_class_spinner" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="1,2,3,4,5"
+                android:id="@+id/processTable">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/pid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_column="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_weight="20"
+                        android:padding="10dp"
+                        android:text="PName"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+
+                    <TextView
+                        android:id="@+id/atime"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="2"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="AT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/btime"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="3"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="BT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="4"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="TAT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="5"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="WT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="5"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:text="Priority"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:visibility="invisible"></TextView>
+
+                </TableRow>
+
+
+                <LinearLayout
+                    android:id="@+id/sum_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+            </TableLayout>
+        </HorizontalScrollView>
+
+            <Button
+                android:id="@+id/go"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/round_primary"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"></Button>
+            </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/outputContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            android:text="CPU Queue : "
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="8dp"
+            tools:ignore="MissingConstraints" />
+        <HorizontalScrollView
+            android:id="@+id/cpu_queue_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <com.example.scheduling.util.CpuQueueView
+                android:id="@+id/cpu_queue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+        </HorizontalScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

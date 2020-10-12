@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit">
+
+        <Switch
+            android:id="@+id/switchio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I/O"
+            android:textStyle="bold"></Switch>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="1,2,3,5">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pro"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_column="1"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:text="Process Name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_weight="15"></TextView>
+
+
+                <TextView
+                    android:id="@+id/at"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_column="2"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:text="Arrival Time"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_weight="20"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_column="3"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:text="Burst Time"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_weight="20"></TextView>
+
+                <TextView
+                    android:id="@+id/iot"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_column="4"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:text="I/O Time"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:visibility="gone"
+                    android:layout_weight="20"></TextView>
+
+                <TextView
+                    android:id="@+id/bt2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_column="5"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:text="Burst Time"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:visibility="gone"
+                    android:layout_weight="20"></TextView>
+
+            </TableRow>
+
+            <LinearLayout
+                android:id="@+id/layout_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="381dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_add"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_primary"
+                android:drawableRight="@drawable/ic_add"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Add Row"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"></Button>
+
+            <Button
+                android:id="@+id/row_delete"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_primary"
+                android:drawableRight="@drawable/ic_baseline_close_24"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Remove Row"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"></Button>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/round_primary"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

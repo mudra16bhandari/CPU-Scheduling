@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/sum_pro"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:layout_weight="20" />
+
+            <TextView
+                android:id="@+id/sum_at"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_weight="20"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/sum_bt"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="20"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/sum_wt"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_weight="20"
+                android:gravity="center"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/sum_tat"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_weight="20"
+                android:gravity="center"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/sum_prior"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_weight="20"
+                android:inputType="number" />
+
+        </TableRow>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
