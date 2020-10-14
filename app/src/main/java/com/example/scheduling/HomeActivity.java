@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scheduling.algorithms.FCFS;
 import com.example.scheduling.algorithms.LJF;
+import com.example.scheduling.algorithms.PriorityBased;
 import com.example.scheduling.algorithms.SJF;
 import com.example.scheduling.algorithms.SRTF;
 import com.example.scheduling.model.Input;
@@ -55,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_activity);
         initViews();
         rows = new ArrayList<>();
-        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF" ,"LRTF" , "Priority" , "Round robin"};
+        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF" ,"LRTF" , "Priority Non-Preemptive","Priority Preemptive" , "Round robin"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_textview, algoritms);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         algoClass.setAdapter(adapter);
@@ -70,9 +71,14 @@ public class HomeActivity extends AppCompatActivity {
                     case 4:
                     case 5:
                         priority.setVisibility(View.INVISIBLE);
+                        tr.removeAllViews();
+                        execute();
                         break;
                     case 6:
+                    case 7:
                         setUpPriority();
+                        tr.removeAllViews();
+                        execute();
                         break;
                 }
             }
@@ -139,6 +145,16 @@ public class HomeActivity extends AppCompatActivity {
                     cpuQueue = ljf.getCpuQueue();
                     display_wt_tat(output);
                     break;
+                case 6:
+                    PriorityBased pr = new PriorityBased();
+                    output = pr.getNonPreemptive(input);
+                    cpuQueue = pr.getCpuQueue();
+                    display_wt_tat(output);
+                case 7:
+                    PriorityBased prio = new PriorityBased();
+                    output = prio.getPreemptive(input);
+                    cpuQueue = prio.getCpuQueue();
+                    display_wt_tat(output);
             }
             outputContainer.setVisibility(VISIBLE);
             /*if (type == 3) {
@@ -261,13 +277,22 @@ public class HomeActivity extends AppCompatActivity {
 
     private void execute() {
         for (int i = 0; i < input.length; i++) {
-            View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
+            final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
             TextView pname = (TextView) rowView.findViewById(R.id.sum_pro);
             TextView at = (TextView) rowView.findViewById(R.id.sum_at);
             TextView bt = (TextView) rowView.findViewById(R.id.sum_bt);
             pname.setText(input[i].getpName());
             at.setText(String.valueOf(input[i].getaTime()));
             bt.setText(String.valueOf(input[i].getbTime()));
+            int type = algoClass.getSelectedItemPosition();
+            if(type!=6 && type!=7){
+                EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
+                pri.setVisibility(View.INVISIBLE);
+            }
+            else {
+                EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
+                pri.setVisibility(View.VISIBLE);
+            }
             tr.addView(rowView);
         }
     }
@@ -285,6 +310,13 @@ public class HomeActivity extends AppCompatActivity {
         return Arrays.copyOf(p, p.length, Output[].class);
     }
     public void display_wt_tat(Output[] out){
+        int type = algoClass.getSelectedItemPosition();
+        for (int i = 0; i <tr.getChildCount() ; i++) {
+        if(type==6 || type==7) {
+            ConstraintLayout row = (ConstraintLayout) tr.getChildAt(i);
+            input[i].setPriority(Integer.parseInt(((EditText) row.findViewById(R.id.sum_prior)).getText().toString()));
+        }
+        }
         tr.removeAllViews();
         for (int i = 0; i < input.length; i++) {
             final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
@@ -300,7 +332,18 @@ public class HomeActivity extends AppCompatActivity {
             wt.setText(String.valueOf(out[i].getWaiting()));
             tat.setText(String.valueOf(out[i].getTurnAround()));
             ct.setText(String.valueOf(out[i].getCompletion()));
+            EditText pri = (EditText)rowView.findViewById(R.id.sum_prior);
+            if(type==6 || type==7) {
+                pri.setText(String.valueOf(input[i].getPriority()));
+            }
+            else {
+                pri.setVisibility(View.INVISIBLE);
+            }
             tr.addView(rowView);
+        }
+    }
+    public void editTable(){
+        for(int i=0;i<tr.getChildCount();i++){
         }
     }
 }

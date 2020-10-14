@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi;
 
 public class Input implements Parcelable {
     private String pName;//Process Name
-    //private int priority;//Priority
+    private int priority;//Priority
     private int aTime;//Arrival Time
     private int bTime;//Burst Time
 
@@ -17,7 +17,7 @@ public class Input implements Parcelable {
         pName = in.pName;
         aTime = in.aTime;
         bTime = in.bTime;
-        //priority = in.priority;
+        priority = in.priority;
     }
 
     //DEFAULT CONSTRUCTOR
@@ -86,11 +86,11 @@ public class Input implements Parcelable {
         this.bTime = bTime;
     }
 
-   /* public int getPriority() {
+    public int getPriority() {
         return priority;
     }
 
     public void setPriority(int priority) {
         this.priority = priority;
-    }*/
+    }
 }
