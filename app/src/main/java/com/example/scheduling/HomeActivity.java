@@ -1,12 +1,11 @@
 package com.example.scheduling;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,12 +17,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scheduling.algorithms.FCFS;
 import com.example.scheduling.algorithms.LJF;
 import com.example.scheduling.algorithms.PriorityBased;
+import com.example.scheduling.algorithms.RoundRobin;
 import com.example.scheduling.algorithms.SJF;
 import com.example.scheduling.algorithms.SRTF;
 import com.example.scheduling.model.Input;
@@ -43,13 +44,14 @@ public class HomeActivity extends AppCompatActivity {
     TableLayout processTable;
     CpuQueueView cpuQueueView;
     ConstraintLayout outputContainer;
-    Button go;
+    Button go,change_tq;
     Parcelable[] p;
     LinearLayout tr;
     List<TableRow> rows;
     Input[] input;
     Output[] output = null;
     TextView priority;
+    int tq;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,25 @@ public class HomeActivity extends AppCompatActivity {
                     case 6:
                     case 7:
                         setUpPriority();
+                        tr.removeAllViews();
+                        execute();
+                        break;
+                    case 8:
+                        priority.setVisibility(View.INVISIBLE);
+                        try {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+                            alert.setTitle("Enter Time Quantum");
+                            alert.setMessage("");
+                            final EditText in_tq = new EditText(HomeActivity.this);
+                            alert.setView(in_tq);
+                            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    tq = Integer.parseInt(in_tq.getText().toString());
+                                }
+                            });
+                            alert.show();
+                        } catch (Exception e) {
+                        }
                         tr.removeAllViews();
                         execute();
                         break;
@@ -111,6 +132,7 @@ public class HomeActivity extends AppCompatActivity {
         outputContainer = findViewById(R.id.outputContainer);
         output=toOutputObject(p);
         priority=findViewById(R.id.prior);
+        change_tq = findViewById(R.id.change_tq);
     }
 
 
@@ -154,6 +176,11 @@ public class HomeActivity extends AppCompatActivity {
                     PriorityBased prio = new PriorityBased();
                     output = prio.getPreemptive(input);
                     cpuQueue = prio.getCpuQueue();
+                    display_wt_tat(output);
+                case 8:
+                    RoundRobin rr = new RoundRobin();
+                    output = rr.getOutput(input,tq);
+                    cpuQueue = rr.getCpuQueue();
                     display_wt_tat(output);
             }
             outputContainer.setVisibility(VISIBLE);

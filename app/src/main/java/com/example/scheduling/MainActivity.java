@@ -68,10 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (i < 5) {
                     addRow();
                     i++;
-                }
             }
         });
         delete.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBackPressed() {
-        finish();
+        finishAffinity();
     }
 
     private void includeIO() {

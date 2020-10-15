@@ -22,6 +22,16 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/algo_class_spinner" />
         </LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Time Quantum"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:id="@+id/change_tq"
+            android:textAlignment="center"
+            android:visibility="gone"
+            ></Button>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -170,6 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout">
         <TextView
             android:id="@+id/textView3"
@@ -183,9 +194,10 @@
             android:textStyle="bold"
             tools:layout_editor_absoluteX="8dp"
             tools:ignore="MissingConstraints" />
+
         <HorizontalScrollView
             android:id="@+id/cpu_queue_container"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:padding="5dp"
@@ -198,6 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:layout_marginEnd="10dp"
                 android:animateLayoutChanges="true"/>
         </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
