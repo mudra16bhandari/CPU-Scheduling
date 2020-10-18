@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     List<TableRow> rows;
     Input[] input;
     Output[] output = null;
-    TextView priority;
+    TextView priority,time_quantum;
     int tq;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,12 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         algoClass.setAdapter(adapter);
         execute();
+        change_tq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayAlert();
+            }
+        });
         algoClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -74,33 +80,26 @@ public class HomeActivity extends AppCompatActivity {
                     case 4:
                     case 5:
                         priority.setVisibility(View.INVISIBLE);
-                        tr.removeAllViews();
-                        execute();
+                        outputContainer.setVisibility(View.INVISIBLE);
+                        change_tq.setVisibility(View.GONE);
+                        time_quantum.setVisibility(View.GONE);
+                        editExecute();
                         break;
                     case 6:
                     case 7:
+                        outputContainer.setVisibility(View.INVISIBLE);
+                        change_tq.setVisibility(View.GONE);
+                        time_quantum.setVisibility(View.GONE);
                         setUpPriority();
-                        tr.removeAllViews();
-                        execute();
+                        editExecute();
                         break;
                     case 8:
+                        outputContainer.setVisibility(View.INVISIBLE);
                         priority.setVisibility(View.INVISIBLE);
-                        try {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-                            alert.setTitle("Enter Time Quantum");
-                            alert.setMessage("");
-                            final EditText in_tq = new EditText(HomeActivity.this);
-                            alert.setView(in_tq);
-                            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    tq = Integer.parseInt(in_tq.getText().toString());
-                                }
-                            });
-                            alert.show();
-                        } catch (Exception e) {
-                        }
-                        tr.removeAllViews();
-                        execute();
+                        displayAlert();
+                        change_tq.setVisibility(VISIBLE);
+                        time_quantum.setVisibility(VISIBLE);
+                        editExecute();
                         break;
                 }
             }
@@ -116,6 +115,24 @@ public class HomeActivity extends AppCompatActivity {
                 getOuput();
             }
         });
+    }
+    void displayAlert(){
+        try {
+            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+            alert.setTitle("Enter Time Quantum");
+            alert.setMessage("");
+            final EditText in_tq = new EditText(HomeActivity.this);
+            alert.setView(in_tq);
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    tq = Integer.parseInt(in_tq.getText().toString());
+                    time_quantum.setText("Time Quantum : "+tq);
+                }
+            });
+            alert.show();
+            editExecute();
+        } catch (Exception e) {
+        }
     }
     void setUpPriority() {
         priority.setVisibility(VISIBLE);
@@ -134,6 +151,7 @@ public class HomeActivity extends AppCompatActivity {
         output=toOutputObject(p);
         priority=findViewById(R.id.prior);
         change_tq = findViewById(R.id.change_tq);
+        time_quantum = findViewById(R.id.time_quantum);
     }
 
 
@@ -148,49 +166,49 @@ public class HomeActivity extends AppCompatActivity {
                     FCFS fcfs = new FCFS();
                     output = fcfs.getOutput(input);
                     cpuQueue = fcfs.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 2:
                     SJF sjf = new SJF();
                     output = sjf.getOutput(input);
                     cpuQueue = sjf.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 3:
                     SRTF srtf = new SRTF();
                     output = srtf.getOutput(input);
                     cpuQueue = srtf.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 4:
                     LJF ljf = new LJF();
                     output = ljf.getOutput(input);
                     cpuQueue = ljf.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 5:
                     LRTF lrtf = new LRTF();
                     output = lrtf.getOutput(input);
                     cpuQueue = lrtf.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 6:
                     PriorityBased pr = new PriorityBased();
                     output = pr.getNonPreemptive(input);
                     cpuQueue = pr.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 7:
                     PriorityBased prio = new PriorityBased();
                     output = prio.getPreemptive(input);
                     cpuQueue = prio.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
                 case 8:
                     RoundRobin rr = new RoundRobin();
                     output = rr.getOutput(input,tq);
                     cpuQueue = rr.getCpuQueue();
-                    display_wt_tat(output);
+                    editTable(output);
                     break;
             }
             outputContainer.setVisibility(VISIBLE);
@@ -322,6 +340,13 @@ public class HomeActivity extends AppCompatActivity {
             at.setText(String.valueOf(input[i].getaTime()));
             bt.setText(String.valueOf(input[i].getbTime()));
             int type = algoClass.getSelectedItemPosition();
+            tr.addView(rowView);
+        }
+    }
+    private void editExecute(){
+        for (int i = 0; i < tr.getChildCount(); i++) {
+            ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
+            int type = algoClass.getSelectedItemPosition();
             if(type!=6 && type!=7){
                 EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
                 pri.setVisibility(View.INVISIBLE);
@@ -330,7 +355,12 @@ public class HomeActivity extends AppCompatActivity {
                 EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
                 pri.setVisibility(View.VISIBLE);
             }
-            tr.addView(rowView);
+            TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
+            TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
+            TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
+            wt.setText("");
+            tat.setText("");
+            ct.setText("");
         }
     }
 
@@ -346,7 +376,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         return Arrays.copyOf(p, p.length, Output[].class);
     }
-    public void display_wt_tat(Output[] out){
+    /*public void display_wt_tat(Output[] out){
         int type = algoClass.getSelectedItemPosition();
         for (int i = 0; i <tr.getChildCount() ; i++) {
         if(type==6 || type==7) {
@@ -378,9 +408,22 @@ public class HomeActivity extends AppCompatActivity {
             }
             tr.addView(rowView);
         }
-    }
-    public void editTable(){
+    }*/
+    public void editTable(Output[] out){
         for(int i=0;i<tr.getChildCount();i++){
+            int type = algoClass.getSelectedItemPosition();
+            ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
+            if(type==6 || type==7) {
+                input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
+            }
+            TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
+            TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
+            TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
+            wt.setText(String.valueOf(out[i].getWaiting()));
+            tat.setText(String.valueOf(out[i].getTurnAround()));
+            ct.setText(String.valueOf(out[i].getCompletion()));
+
         }
     }
 }
+//1,2,1,0 - 2,3,1,7 - 4,3,2,1 - 3,0,1,2

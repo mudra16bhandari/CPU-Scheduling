@@ -63,7 +63,8 @@
                 android:textSize="14sp"
                 android:layout_weight="20"
                 android:hint="IO"
-                android:visibility="gone"></EditText>
+                android:visibility="gone"
+                android:inputType="numberDecimal"></EditText>
 
             <EditText
                 android:id="@+id/input_bt2"
@@ -76,7 +77,8 @@
                 android:textSize="14sp"
                 android:layout_weight="20"
                 android:hint="BT"
-                android:visibility="gone"></EditText>
+                android:visibility="gone"
+                android:inputType="numberDecimal"></EditText>
 
         </TableRow>
     </LinearLayout>
