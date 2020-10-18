@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scheduling.algorithms.FCFS;
 import com.example.scheduling.algorithms.LJF;
+import com.example.scheduling.algorithms.LRTF;
 import com.example.scheduling.algorithms.PriorityBased;
 import com.example.scheduling.algorithms.RoundRobin;
 import com.example.scheduling.algorithms.SJF;
@@ -167,21 +168,30 @@ public class HomeActivity extends AppCompatActivity {
                     cpuQueue = ljf.getCpuQueue();
                     display_wt_tat(output);
                     break;
+                case 5:
+                    LRTF lrtf = new LRTF();
+                    output = lrtf.getOutput(input);
+                    cpuQueue = lrtf.getCpuQueue();
+                    display_wt_tat(output);
+                    break;
                 case 6:
                     PriorityBased pr = new PriorityBased();
                     output = pr.getNonPreemptive(input);
                     cpuQueue = pr.getCpuQueue();
                     display_wt_tat(output);
+                    break;
                 case 7:
                     PriorityBased prio = new PriorityBased();
                     output = prio.getPreemptive(input);
                     cpuQueue = prio.getCpuQueue();
                     display_wt_tat(output);
+                    break;
                 case 8:
                     RoundRobin rr = new RoundRobin();
                     output = rr.getOutput(input,tq);
                     cpuQueue = rr.getCpuQueue();
                     display_wt_tat(output);
+                    break;
             }
             outputContainer.setVisibility(VISIBLE);
             /*if (type == 3) {
