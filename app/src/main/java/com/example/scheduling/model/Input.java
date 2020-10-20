@@ -11,6 +11,21 @@ public class Input implements Parcelable {
     private int priority;//Priority
     private int aTime;//Arrival Time
     private int bTime;//Burst Time
+    private int ioTime;
+    private int bTime2;
+    private int totalB;
+    private int returnTime;
+
+    public int getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(int returnTime) {
+        this.returnTime = returnTime;
+    }
+
+
+
 
     //COPY CONSTRUCTOR
     public Input(Input in) {
@@ -18,6 +33,9 @@ public class Input implements Parcelable {
         aTime = in.aTime;
         bTime = in.bTime;
         priority = in.priority;
+        ioTime = in.ioTime;
+        bTime2 = in.bTime2;
+
     }
 
     //DEFAULT CONSTRUCTOR
@@ -29,6 +47,8 @@ public class Input implements Parcelable {
         pName = in.readString();
         aTime = in.readInt();
         bTime = in.readInt();
+        ioTime = in.readInt();
+        bTime2 = in.readInt();
     }
 
     @Override
@@ -36,6 +56,8 @@ public class Input implements Parcelable {
         dest.writeString(pName);
         dest.writeInt(aTime);
         dest.writeInt(bTime);
+        dest.writeInt(ioTime);
+        dest.writeInt(bTime2);
     }
 
     @Override
@@ -93,4 +115,27 @@ public class Input implements Parcelable {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+    public int getIoTime() {
+        return ioTime;
+    }
+
+    public void setIoTime(int ioTime) {
+        this.ioTime = ioTime;
+    }
+
+    public int getbTime2() {
+        return bTime2;
+    }
+
+    public void setbTime2(int bTime2) {
+        this.bTime2 = bTime2;
+    }
+    public int getTotalB() {
+        return totalB;
+    }
+
+    public void setTotalB(int totalB) {
+        this.totalB = totalB;
+    }
+
 }

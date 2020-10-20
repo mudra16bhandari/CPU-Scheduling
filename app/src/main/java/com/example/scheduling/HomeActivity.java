@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scheduling.algorithms.FCFS;
+import com.example.scheduling.algorithms.FCFSwithIO;
 import com.example.scheduling.algorithms.LJF;
 import com.example.scheduling.algorithms.LRTF;
 import com.example.scheduling.algorithms.PriorityBased;
@@ -45,21 +46,22 @@ public class HomeActivity extends AppCompatActivity {
     TableLayout processTable;
     CpuQueueView cpuQueueView;
     ConstraintLayout outputContainer;
-    Button go,change_tq;
+    Button go, change_tq;
     Parcelable[] p;
     LinearLayout tr;
     List<TableRow> rows;
     Input[] input;
     Output[] output = null;
-    TextView priority,time_quantum;
+    TextView priority, time_quantum;
     int tq;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         initViews();
         rows = new ArrayList<>();
-        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF" ,"LRTF" , "Priority Non-Preemptive","Priority Preemptive" , "Round robin"};
+        algoritms = new String[]{"Select algorithm", "FCFS", "SJF", "SRTF", "LJF", "LRTF", "Priority Non-Preemptive", "Priority Preemptive", "Round robin"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_textview, algoritms);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         algoClass.setAdapter(adapter);
@@ -116,27 +118,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    void displayAlert(){
-        try {
-            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-            alert.setTitle("Enter Time Quantum");
-            alert.setMessage("");
-            final EditText in_tq = new EditText(HomeActivity.this);
-            alert.setView(in_tq);
-            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    tq = Integer.parseInt(in_tq.getText().toString());
-                    time_quantum.setText("Time Quantum : "+tq);
-                }
-            });
-            alert.show();
-            editExecute();
-        } catch (Exception e) {
-        }
-    }
+
     void setUpPriority() {
         priority.setVisibility(VISIBLE);
     }
+
     private void initViews() {
         Bundle b = getIntent().getExtras();
         p = b.getParcelableArray("input");
@@ -148,8 +134,8 @@ public class HomeActivity extends AppCompatActivity {
         cpuQueueView = findViewById(R.id.cpu_queue);
         tr = findViewById(R.id.sum_row);
         outputContainer = findViewById(R.id.outputContainer);
-        output=toOutputObject(p);
-        priority=findViewById(R.id.prior);
+        output = toOutputObject(p);
+        priority = findViewById(R.id.prior);
         change_tq = findViewById(R.id.change_tq);
         time_quantum = findViewById(R.id.time_quantum);
     }
@@ -163,7 +149,7 @@ public class HomeActivity extends AppCompatActivity {
             List<Integer> cpuQueue = null;
             switch (type) {
                 case 1:
-                    FCFS fcfs = new FCFS();
+                    FCFSwithIO fcfs = new FCFSwithIO();
                     output = fcfs.getOutput(input);
                     cpuQueue = fcfs.getCpuQueue();
                     editTable(output);
@@ -206,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 case 8:
                     RoundRobin rr = new RoundRobin();
-                    output = rr.getOutput(input,tq);
+                    output = rr.getOutput(input, tq);
                     cpuQueue = rr.getCpuQueue();
                     editTable(output);
                     break;
@@ -343,15 +329,15 @@ public class HomeActivity extends AppCompatActivity {
             tr.addView(rowView);
         }
     }
-    private void editExecute(){
+
+    private void editExecute() {
         for (int i = 0; i < tr.getChildCount(); i++) {
             ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
             int type = algoClass.getSelectedItemPosition();
-            if(type!=6 && type!=7){
+            if (type != 6 && type != 7) {
                 EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
                 pri.setVisibility(View.INVISIBLE);
-            }
-            else {
+            } else {
                 EditText pri = (EditText) rowView.findViewById(R.id.sum_prior);
                 pri.setVisibility(View.VISIBLE);
             }
@@ -370,50 +356,19 @@ public class HomeActivity extends AppCompatActivity {
         }
         return Arrays.copyOf(p, p.length, Input[].class);
     }
+
     public static Output[] toOutputObject(Parcelable[] p) {
         if (p == null) {
             return null;
         }
         return Arrays.copyOf(p, p.length, Output[].class);
     }
-    /*public void display_wt_tat(Output[] out){
-        int type = algoClass.getSelectedItemPosition();
-        for (int i = 0; i <tr.getChildCount() ; i++) {
-        if(type==6 || type==7) {
-            ConstraintLayout row = (ConstraintLayout) tr.getChildAt(i);
-            input[i].setPriority(Integer.parseInt(((EditText) row.findViewById(R.id.sum_prior)).getText().toString()));
-        }
-        }
-        tr.removeAllViews();
-        for (int i = 0; i < input.length; i++) {
-            final View rowView = getLayoutInflater().inflate(R.layout.sum_add, null, false);
-            TextView pname = (TextView) rowView.findViewById(R.id.sum_pro);
-            TextView at = (TextView) rowView.findViewById(R.id.sum_at);
-            TextView bt = (TextView) rowView.findViewById(R.id.sum_bt);
-            pname.setText(input[i].getpName());
-            at.setText(String.valueOf(input[i].getaTime()));
-            bt.setText(String.valueOf(input[i].getbTime()));
-            TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
-            TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
-            TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
-            wt.setText(String.valueOf(out[i].getWaiting()));
-            tat.setText(String.valueOf(out[i].getTurnAround()));
-            ct.setText(String.valueOf(out[i].getCompletion()));
-            EditText pri = (EditText)rowView.findViewById(R.id.sum_prior);
-            if(type==6 || type==7) {
-                pri.setText(String.valueOf(input[i].getPriority()));
-            }
-            else {
-                pri.setVisibility(View.INVISIBLE);
-            }
-            tr.addView(rowView);
-        }
-    }*/
-    public void editTable(Output[] out){
-        for(int i=0;i<tr.getChildCount();i++){
+
+    public void editTable(Output[] out) {
+        for (int i = 0; i < tr.getChildCount(); i++) {
             int type = algoClass.getSelectedItemPosition();
             ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
-            if(type==6 || type==7) {
+            if (type == 6 || type == 7) {
                 input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
             }
             TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
@@ -425,5 +380,23 @@ public class HomeActivity extends AppCompatActivity {
 
         }
     }
+
+    void displayAlert() {
+        try {
+            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+            alert.setTitle("Enter Time Quantum");
+            alert.setMessage("");
+            final EditText in_tq = new EditText(HomeActivity.this);
+            alert.setView(in_tq);
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    tq = Integer.parseInt(in_tq.getText().toString());
+                    time_quantum.setText("Time Quantum : " + tq);
+                }
+            });
+            alert.show();
+            editExecute();
+        } catch (Exception e) {
+        }
+    }
 }
-//1,2,1,0 - 2,3,1,7 - 4,3,2,1 - 3,0,1,2

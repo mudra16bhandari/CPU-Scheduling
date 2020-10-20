@@ -155,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             in.setpName(pname);
             in.setaTime(Integer.parseInt(((EditText) row.findViewById(R.id.input_at)).getText().toString()));
             in.setbTime(Integer.parseInt(((EditText) row.findViewById(R.id.input_bt)).getText().toString()));
+            in.setIoTime(Integer.parseInt(((EditText)row.findViewById(R.id.input_io)).getText().toString()));
+            in.setbTime2(Integer.parseInt(((EditText)row.findViewById(R.id.input_bt2)).getText().toString()));
             input[i] = in;
         }
     }
