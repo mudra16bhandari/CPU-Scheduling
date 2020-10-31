@@ -24,6 +24,10 @@ public class FCFSwithIO {
        Output[] out = new Output[len];
        cpuQueue = new ArrayList<>();
        List<Integer> afterIO = new ArrayList<>();
+       boolean[] comp = new boolean[len];
+        for (int i = 0; i <len ; i++) {
+            comp[i] = false;
+        }
        cpuQueue.add(last);
        int count =0;
        while (count<len) {
@@ -34,21 +38,41 @@ public class FCFSwithIO {
                    last = input[sort[i]].getaTime();
                    cpuQueue.add(last);
                    i--;
-               } else {
-                           if (afterIO.isEmpty() == false) {
+                   if (!afterIO.isEmpty()) {
+                       for (int j = 0; j < i; j++) {
+                           if (inputCopy[sort[j]].getReturnTime() <= last && !afterIO.isEmpty() && inputCopy[sort[j]].getTotalB() != 0) {
+                               cpuQueue.add(sort[j]);
+                               inputCopy[sort[j]].setTotalB(0);
+                               last = last + inputCopy[sort[j]].getbTime2();
+                               System.out.println(inputCopy[sort[j]].getpName());
+                               cpuQueue.add(last);
+                               tmp.setTurnAround(last - inputCopy[sort[j]].getaTime());
+                               tmp.setWaiting(tmp.getTurnAround() - input[sort[j]].getTotalB());
+                               tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[j]].getaTime());
+                               out[sort[j]] = tmp;
+                               comp[j] = true;
+                               count++;
+                               afterIO.remove((Integer) sort[j]);
+                           }
+                       }
+                   }
+               }
+               else{
+                           if (!afterIO.isEmpty()) {
                                for (int j = 0; j < i; j++) {
-                                   if (afterIO.get(j) == -1) {
-
-                                   } else {
-                                       if (inputCopy[sort[j]].getReturnTime() <= last && !afterIO.isEmpty() && inputCopy[sort[j]].getTotalB() != 0) {
-                                           cpuQueue.add(sort[j]);
-                                           inputCopy[sort[j]].setTotalB(0);
-                                           last = last + inputCopy[sort[j]].getbTime2();
-                                           System.out.println(inputCopy[sort[j]].getpName());
-                                           out[sort[j]] = tmp;
-                                           cpuQueue.add(last);
-                                           afterIO.set(j, -1);
-                                       }
+                                   if (inputCopy[sort[j]].getReturnTime() <= last && !afterIO.isEmpty() && inputCopy[sort[j]].getTotalB() != 0) {
+                                       cpuQueue.add(sort[j]);
+                                       inputCopy[sort[j]].setTotalB(0);
+                                       last = last + inputCopy[sort[j]].getbTime2();
+                                       System.out.println(inputCopy[sort[j]].getpName());
+                                       cpuQueue.add(last);
+                                       tmp.setTurnAround(last - inputCopy[sort[j]].getaTime());
+                                       tmp.setWaiting(tmp.getTurnAround() - input[sort[j]].getTotalB());
+                                       tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[j]].getaTime());
+                                       out[sort[j]] = tmp;
+                                       comp[j] = true;
+                                       count++;
+                                       afterIO.remove((Integer) sort[j]);
                                    }
                                }
                            }if (inputCopy[sort[i]].getbTime() != 0) {
@@ -59,8 +83,8 @@ public class FCFSwithIO {
                            inputCopy[sort[i]].setReturnTime(last + inputCopy[sort[i]].getIoTime());
                            afterIO.add(sort[i]);
                            cpuQueue.add(last);
-                       } /*else {
-                           if (inputCopy[sort[i]].getReturnTime() <= last) {
+                       } else {
+                           if (inputCopy[sort[i]].getReturnTime() <= last && !comp[i]) {
                                cpuQueue.add(sort[i]);
                                //System.out.println(inputCopy[sort[i]].getpName());
                                last = last + inputCopy[sort[i]].getbTime2();
@@ -68,28 +92,18 @@ public class FCFSwithIO {
                                out[sort[i]] = tmp;
                                cpuQueue.add(last);
                            }
-                       }*/
-                       if (inputCopy[sort[i]].getTotalB() == 0) {
+                       }
+                       if (inputCopy[sort[i]].getTotalB() == 0 && !comp[i]) {
                            tmp.setTurnAround(last - inputCopy[sort[i]].getaTime());
                            tmp.setWaiting(tmp.getTurnAround() - input[sort[i]].getTotalB());
                            tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[i]].getaTime());
+                           comp[i] = true;
                            count++;
                        }
                    }
                }
            }
-
-
-
-
-
-
-
-
-
-
-
-    return out;
+       return out;
     }
 
     public List<Integer> getCpuQueue() {
