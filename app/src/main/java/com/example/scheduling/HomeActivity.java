@@ -52,7 +52,8 @@ public class HomeActivity extends AppCompatActivity {
     List<TableRow> rows;
     Input[] input;
     Output[] output = null;
-    TextView priority, time_quantum;
+    TextView priority, time_quantum, IO,BT2,TotalBT;
+    boolean io;
     int tq;
 
     @Override
@@ -127,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         p = b.getParcelableArray("input");
         input = toInputObject(p);
+        io = b.getBoolean("IO");
         p = b.getParcelableArray("output");
         algoClass = findViewById(R.id.algo_class);
         processTable = findViewById(R.id.processTable);
@@ -138,6 +140,9 @@ public class HomeActivity extends AppCompatActivity {
         priority = findViewById(R.id.prior);
         change_tq = findViewById(R.id.change_tq);
         time_quantum = findViewById(R.id.time_quantum);
+        IO = findViewById(R.id.IOtime);
+        BT2 = findViewById(R.id.bt2time);
+        TotalBT = findViewById(R.id.Tbt);
     }
 
 
@@ -149,9 +154,16 @@ public class HomeActivity extends AppCompatActivity {
             List<Integer> cpuQueue = null;
             switch (type) {
                 case 1:
-                    FCFSwithIO fcfs = new FCFSwithIO();
-                    output = fcfs.getOutput(input);
-                    cpuQueue = fcfs.getCpuQueue();
+                    if(io) {
+                        FCFSwithIO fcfs = new FCFSwithIO();
+                        output = fcfs.getOutput(input);
+                        cpuQueue = fcfs.getCpuQueue();
+                    }
+                    else {
+                        FCFS fcfs = new FCFS();
+                        output = fcfs.getOutput(input);
+                        cpuQueue = fcfs.getCpuQueue();
+                    }
                     editTable(output);
                     break;
                 case 2:
@@ -325,7 +337,20 @@ public class HomeActivity extends AppCompatActivity {
             pname.setText(input[i].getpName());
             at.setText(String.valueOf(input[i].getaTime()));
             bt.setText(String.valueOf(input[i].getbTime()));
-            int type = algoClass.getSelectedItemPosition();
+            if(io){
+                IO.setVisibility(VISIBLE);
+                BT2.setVisibility(VISIBLE);
+                TotalBT.setVisibility(VISIBLE);
+                TextView iot = (TextView) rowView.findViewById(R.id.sum_io);
+                TextView bt2 = (TextView) rowView.findViewById(R.id.sum_bt2);
+                TextView tbt = (TextView) rowView.findViewById(R.id.sum_tbt);
+                iot.setVisibility(VISIBLE);
+                bt2.setVisibility(VISIBLE);
+                tbt.setVisibility(VISIBLE);
+                iot.setText(String.valueOf(input[i].getIoTime()));
+                bt2.setText(String.valueOf(input[i].getbTime2()));
+                tbt.setText(String.valueOf(input[i].getbTime()+input[i].getbTime2()));
+            }
             tr.addView(rowView);
         }
     }
@@ -371,13 +396,15 @@ public class HomeActivity extends AppCompatActivity {
             if (type == 6 || type == 7) {
                 input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
             }
+            if(io){
+
+            }
             TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
             TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
             TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
             wt.setText(String.valueOf(out[i].getWaiting()));
             tat.setText(String.valueOf(out[i].getTurnAround()));
             ct.setText(String.valueOf(out[i].getCompletion()));
-
         }
     }
 

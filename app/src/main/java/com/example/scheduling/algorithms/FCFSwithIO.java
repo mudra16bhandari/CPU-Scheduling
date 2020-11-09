@@ -37,23 +37,69 @@ public class FCFSwithIO {
                 if (!afterIO.isEmpty()) {
                     System.out.println("After IO not empty");
                     for (int j = 0; j <= i; j++) {
-                        if (inputCopy[sort[j]].getbTime() == 0 && !afterIO.isEmpty() && inputCopy[sort[j]].getReturnTime() <= last && afterIO.contains(sort[j])) {
-                            System.out.println("After IO Process executed " + inputCopy[sort[j]].getpName() + " " + sort[j] + " " + j);
-                            cpuQueue.add(sort[j]);
-                            inputCopy[sort[j]].setTotalB(0);
-                            last = last + inputCopy[sort[j]].getbTime2();
-                            tmp.setTurnAround(last - inputCopy[sort[j]].getaTime());
-                            tmp.setWaiting(tmp.getTurnAround() - input[sort[j]].getTotalB());
-                            tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[j]].getaTime());
-                            out[sort[j]] = tmp;
-                            cpuQueue.add(last);
-                            int index = afterIO.indexOf(sort[j]);
-                            afterIO.remove(index);
-                            comp[sort[j]] = true;
-                            count++;
+                        if(inputCopy[sort[j]].getReturnTime()>last){
+                            System.out.println("Should be Empty");
+                        }
+                        else{
+                            if (inputCopy[sort[j]].getbTime() == 0 && !afterIO.isEmpty() && inputCopy[sort[j]].getReturnTime() <= last &&
+                                    afterIO.contains(sort[j]) && inputCopy[sort[j]].getTotalB()!=0) {
+                                System.out.println("Condition1 satisfied");
+                                if(inputCopy[sort[j]].getReturnTime() <= inputCopy[sort[i]].getaTime()) {
+                                    System.out.println("After IO Process executed " + inputCopy[sort[j]].getpName() + " " + sort[j] + " " + j);
+                                    cpuQueue.add(sort[j]);
+                                    inputCopy[sort[j]].setTotalB(0);
+                                    last = last + inputCopy[sort[j]].getbTime2();
+                                    tmp.setTurnAround(last - inputCopy[sort[j]].getaTime());
+                                    tmp.setWaiting(tmp.getTurnAround() - input[sort[j]].getTotalB());
+                                    tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[j]].getaTime());
+                                    out[sort[j]] = tmp;
+                                    cpuQueue.add(last);
+                                    int index = afterIO.indexOf(sort[j]);
+                                    afterIO.remove(index);
+                                    comp[sort[j]] = true;
+                                    count++;
+                                }
+                                else {
+                                    if(sort[j]<=sort[i]){
+                                        System.out.println("After IO Process executed " + inputCopy[sort[j]].getpName() + " " + sort[j] + " " + j);
+                                        cpuQueue.add(sort[j]);
+                                        inputCopy[sort[j]].setTotalB(0);
+                                        last = last + inputCopy[sort[j]].getbTime2();
+                                        tmp.setTurnAround(last - inputCopy[sort[j]].getaTime());
+                                        tmp.setWaiting(tmp.getTurnAround() - input[sort[j]].getTotalB());
+                                        tmp.setCompletion(tmp.getTurnAround() + inputCopy[sort[j]].getaTime());
+                                        out[sort[j]] = tmp;
+                                        cpuQueue.add(last);
+                                        int index = afterIO.indexOf(sort[j]);
+                                        afterIO.remove(index);
+                                        comp[sort[j]] = true;
+                                        count++;
+                                    }
+                                    else{
+                                        if (inputCopy[sort[i]].getbTime() != 0) {
+                                            System.out.println("Before IO executed " + inputCopy[sort[i]].getpName());
+                                            cpuQueue.add(sort[i]);
+                                            last = last + inputCopy[sort[i]].getbTime();
+                                            inputCopy[sort[i]].setbTime(0);
+                                            inputCopy[sort[i]].setTotalB(inputCopy[sort[i]].getbTime2());
+                                            inputCopy[sort[i]].setReturnTime(last + inputCopy[sort[i]].getIoTime());
+                                            afterIO.add(sort[i]);
+                                            cpuQueue.add(last);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                    if(inputCopy[sort[i]].getReturnTime()>last){
+                        System.out.println("Should be Empty");
+                        //System.out.println("No process executed");
+                        cpuQueue.add(-1);
+                        last = last + 1;
+                        cpuQueue.add(last);
+                    }
                 }
+
                 if (inputCopy[sort[i]].getaTime() > last) {
                     System.out.println("No process executed");
                     cpuQueue.add(-1);
@@ -70,10 +116,9 @@ public class FCFSwithIO {
                         inputCopy[sort[i]].setReturnTime(last + inputCopy[sort[i]].getIoTime());
                         afterIO.add(sort[i]);
                         cpuQueue.add(last);
-                    } else {
-                        System.out.println("No Process Executed");
                     }
                 }
+
                 /*if(inputCopy[sort[i]].getTotalB()==0 && !comp[sort[i]]){
                     System.out.println("After IO Process executed "+inputCopy[sort[i]].getpName());
                     cpuQueue.add(sort[i]);

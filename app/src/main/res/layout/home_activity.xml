@@ -55,7 +55,6 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="1,2,3,4,5"
                 android:id="@+id/processTable">
 
                 <TableRow
@@ -106,10 +105,55 @@
                         android:textStyle="bold"></TextView>
 
                     <TextView
+                        android:id="@+id/IOtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="4"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
+                        android:text="IO"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:visibility="gone"></TextView>
+
+                    <TextView
+                        android:id="@+id/bt2time"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="5"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
+                        android:text="BT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:visibility="gone"></TextView>
+
+                    <TextView
+                        android:id="@+id/Tbt"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_column="6"
+                        android:layout_gravity="center"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
+                        android:text="Total BT"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:visibility="gone"></TextView>
+
+                    <TextView
                         android:id="@+id/ctime"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_column="3"
+                        android:layout_column="7"
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
@@ -120,9 +164,10 @@
                         android:textStyle="bold"></TextView>
 
                     <TextView
+                        android:id="@+id/tat"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_column="4"
+                        android:layout_column="8"
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
@@ -133,9 +178,10 @@
                         android:textStyle="bold"></TextView>
 
                     <TextView
+                        android:id="@+id/wt"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_column="5"
+                        android:layout_column="9"
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:gravity="center"
@@ -149,7 +195,7 @@
                         android:id="@+id/prior"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_column="5"
+                        android:layout_column="10"
                         android:layout_gravity="center"
                         android:layout_weight="20"
                         android:padding="5dp"
