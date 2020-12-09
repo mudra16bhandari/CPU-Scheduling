@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scheduling.algorithms.FCFS;
-import com.example.scheduling.algorithms.FCFSwithIO;
 import com.example.scheduling.algorithms.LJF;
 import com.example.scheduling.algorithms.LRTF;
 import com.example.scheduling.algorithms.PriorityBased;
@@ -40,7 +39,6 @@ import java.util.List;
 import static android.view.View.VISIBLE;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String TAG = "processScheduling";
     String[] algoritms;
     Spinner algoClass;
     TableLayout processTable;
@@ -52,9 +50,11 @@ public class HomeActivity extends AppCompatActivity {
     List<TableRow> rows;
     Input[] input;
     Output[] output = null;
-    TextView priority, time_quantum, IO,BT2,TotalBT;
-    boolean io;
+    TextView priority, time_quantum;
+    TextView avgTurnAround;
+    TextView avgWaiting;
     int tq;
+    boolean noTQexe = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,8 @@ public class HomeActivity extends AppCompatActivity {
                         outputContainer.setVisibility(View.INVISIBLE);
                         change_tq.setVisibility(View.GONE);
                         time_quantum.setVisibility(View.GONE);
+                        avgTurnAround.setVisibility(View.GONE);
+                        avgWaiting.setVisibility(View.GONE);
                         editExecute();
                         break;
                     case 6:
@@ -93,25 +95,32 @@ public class HomeActivity extends AppCompatActivity {
                         outputContainer.setVisibility(View.INVISIBLE);
                         change_tq.setVisibility(View.GONE);
                         time_quantum.setVisibility(View.GONE);
+                        avgTurnAround.setVisibility(View.GONE);
+                        avgWaiting.setVisibility(View.GONE);
                         setUpPriority();
                         editExecute();
                         break;
                     case 8:
                         outputContainer.setVisibility(View.INVISIBLE);
                         priority.setVisibility(View.INVISIBLE);
-                        displayAlert();
                         change_tq.setVisibility(VISIBLE);
-                        time_quantum.setVisibility(VISIBLE);
-                        editExecute();
+                        if (!displayAlert()) {
+                            time_quantum.setVisibility(VISIBLE);
+                            avgTurnAround.setVisibility(View.GONE);
+                            avgWaiting.setVisibility(View.GONE);
+                            editExecute();
+                        } else {
+                            return;
+                        }
                         break;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
+
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +137,6 @@ public class HomeActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         p = b.getParcelableArray("input");
         input = toInputObject(p);
-        io = b.getBoolean("IO");
         p = b.getParcelableArray("output");
         algoClass = findViewById(R.id.algo_class);
         processTable = findViewById(R.id.processTable);
@@ -140,9 +148,8 @@ public class HomeActivity extends AppCompatActivity {
         priority = findViewById(R.id.prior);
         change_tq = findViewById(R.id.change_tq);
         time_quantum = findViewById(R.id.time_quantum);
-        IO = findViewById(R.id.IOtime);
-        BT2 = findViewById(R.id.bt2time);
-        TotalBT = findViewById(R.id.Tbt);
+        avgTurnAround = findViewById(R.id.avgTurnAround);
+        avgWaiting = findViewById(R.id.avgWaiting);
     }
 
 
@@ -154,16 +161,9 @@ public class HomeActivity extends AppCompatActivity {
             List<Integer> cpuQueue = null;
             switch (type) {
                 case 1:
-                    if(io) {
-                        FCFSwithIO fcfs = new FCFSwithIO();
-                        output = fcfs.getOutput(input);
-                        cpuQueue = fcfs.getCpuQueue();
-                    }
-                    else {
-                        FCFS fcfs = new FCFS();
-                        output = fcfs.getOutput(input);
-                        cpuQueue = fcfs.getCpuQueue();
-                    }
+                    FCFS fcfs = new FCFS();
+                    output = fcfs.getOutput(input);
+                    cpuQueue = fcfs.getCpuQueue();
                     editTable(output);
                     break;
                 case 2:
@@ -191,16 +191,24 @@ public class HomeActivity extends AppCompatActivity {
                     editTable(output);
                     break;
                 case 6:
-                    PriorityBased pr = new PriorityBased();
-                    output = pr.getNonPreemptive(input);
-                    cpuQueue = pr.getCpuQueue();
-                    editTable(output);
+                    if (readPriority(input)) {
+                        PriorityBased pr = new PriorityBased();
+                        output = pr.getNonPreemptive(input);
+                        cpuQueue = pr.getCpuQueue();
+                        editTable(output);
+                    } else {
+                        return;
+                    }
                     break;
                 case 7:
-                    PriorityBased prio = new PriorityBased();
-                    output = prio.getPreemptive(input);
-                    cpuQueue = prio.getCpuQueue();
-                    editTable(output);
+                    if (readPriority(input)) {
+                        PriorityBased prio = new PriorityBased();
+                        output = prio.getPreemptive(input);
+                        cpuQueue = prio.getCpuQueue();
+                        editTable(output);
+                    } else {
+                        return;
+                    }
                     break;
                 case 8:
                     RoundRobin rr = new RoundRobin();
@@ -210,120 +218,16 @@ public class HomeActivity extends AppCompatActivity {
                     break;
             }
             outputContainer.setVisibility(VISIBLE);
-            /*if (type == 3) {
-                summaryTable.getChildAt(0).findViewById(R.id.priority).setVisibility(VISIBLE);
-            } else
-                summaryTable.getChildAt(0).findViewById(R.id.priority).setVisibility(View.GONE);
-            for (int i = 0; i < len - 1; i++) {
-                TableRow row = (TableRow) summaryTable.getChildAt(i + 1);
-                if (row == null) {
-                    row = (TableRow) LayoutInflater.from(this).inflate(R.layout.summary_row, null);
-                    summaryTable.addView(row);
-                }
-                if (type == 3) {
-                    row.findViewById(R.id.priority).setVisibility(VISIBLE);
-                    ((TextView) (row.findViewById(R.id.priority))).setText(String.valueOf(input[i].getPriority()));
-                } else
-                    row.findViewById(R.id.priority).setVisibility(View.GONE);
-                ((TextView) (row.findViewById(R.id.pid))).setText(input[i].getpName());
-                ((TextView) (row.findViewById(R.id.atime))).setText(String.valueOf(input[i].getaTime()));
-                ((TextView) (row.findViewById(R.id.btime))).setText(String.valueOf(input[i].getbTime()));
-                ((TextView) (row.findViewById(R.id.turnaround))).setText(String.valueOf(output[i].getTurnAround()));
-                ((TextView) (row.findViewById(R.id.waiting))).setText(String.valueOf(output[i].getWaiting()));
-            }
-
-            int len2 = summaryTable.getChildCount();
-            if (len2 > len) {
-                for (int i = len; i < len2; i++) {
-                    summaryTable.removeViewAt(len);
-                }
-            }*/
             cpuQueueView.setUp(cpuQueue, input);
             //cpuQueueView.startAnimation((Animation)AnimationUtils.loadAnimation(this,R.anim.shake));
             Animation a = AnimationUtils.loadAnimation(this, R.anim.shake);
             a.reset();
             cpuQueueView.clearAnimation();
             cpuQueueView.startAnimation(a);
-
-            /*TableRow row = (TableRow) comparisionTable.getChildAt(1);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("FCFS");
-                comparisionTable.addView(row);
-            }
-            FCFS fcfs = new FCFS();
-            Output[] output1 = fcfs.getOutput(input);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-
-            row = (TableRow) comparisionTable.getChildAt(2);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("SJF (Preemptive)");
-                comparisionTable.addView(row);
-            }
-            SJF sjf = new SJF();
-            output1 = sjf.getPreemptive(input);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-
-            row = (TableRow) comparisionTable.getChildAt(3);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("SJF (Non-preemptive)");
-                comparisionTable.addView(row);
-            }
-            output1 = sjf.getNonPreemptive(input);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-
-            row = (TableRow) comparisionTable.getChildAt(4);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("Priority (Preemptive)");
-                comparisionTable.addView(row);
-            }
-            PriorityBased priority = new PriorityBased();
-            output1 = priority.getPreemptive(input);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-
-            row = (TableRow) comparisionTable.getChildAt(5);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("Priority (Non-preemptive)");
-                comparisionTable.addView(row);
-            }
-            output1 = priority.getNonPreemptive(input);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-
-            row = (TableRow) comparisionTable.getChildAt(6);
-            if (row == null) {
-                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.comparision_row, null);
-                ((TextView) row.findViewById(R.id.type)).setText("Round robin");
-                comparisionTable.addView(row);
-            }
-            RoundRobin robin = new RoundRobin();
-            quantumComparision.setText(String.valueOf(3));
-            output1 = robin.getOutput(input, 3);
-            ((TextView) row.findViewById(R.id.waiting)).setText(String.valueOf(Output.getAverageWaitingTime(output1)));
-            ((TextView) row.findViewById(R.id.turnaround)).setText(String.valueOf(Output.getAverageTurnAround(output1)));
-            quantumComparision.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus)
-                        ((ScrollView) findViewById(R.id.scrollView2)).fullScroll(View.FOCUS_DOWN);
-                }
-            });
-            goComparision.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setRoundRobinComparision();
-                }
-            });
-            Toast.makeText(this,"Done",Toast.LENGTH_SHORT).show();
-            scrollView.smoothScrollTo(0,summaryTable.getTop());*/
+            avgWaiting.setVisibility(VISIBLE);
+            avgTurnAround.setVisibility(VISIBLE);
+            avgWaiting.setText("Average waiting time : " + Output.getAverageWaitingTime(output));
+            avgTurnAround.setText("Average turn around time : " + Output.getAverageTurnAround(output));
         }
 
     }
@@ -337,20 +241,6 @@ public class HomeActivity extends AppCompatActivity {
             pname.setText(input[i].getpName());
             at.setText(String.valueOf(input[i].getaTime()));
             bt.setText(String.valueOf(input[i].getbTime()));
-            if(io){
-                IO.setVisibility(VISIBLE);
-                BT2.setVisibility(VISIBLE);
-                TotalBT.setVisibility(VISIBLE);
-                TextView iot = (TextView) rowView.findViewById(R.id.sum_io);
-                TextView bt2 = (TextView) rowView.findViewById(R.id.sum_bt2);
-                TextView tbt = (TextView) rowView.findViewById(R.id.sum_tbt);
-                iot.setVisibility(VISIBLE);
-                bt2.setVisibility(VISIBLE);
-                tbt.setVisibility(VISIBLE);
-                iot.setText(String.valueOf(input[i].getIoTime()));
-                bt2.setText(String.valueOf(input[i].getbTime2()));
-                tbt.setText(String.valueOf(input[i].getbTime()+input[i].getbTime2()));
-            }
             tr.addView(rowView);
         }
     }
@@ -393,12 +283,9 @@ public class HomeActivity extends AppCompatActivity {
         for (int i = 0; i < tr.getChildCount(); i++) {
             int type = algoClass.getSelectedItemPosition();
             ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
-            if (type == 6 || type == 7) {
+            /*if (type == 6 || type == 7) {
                 input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
-            }
-            if(io){
-
-            }
+            }*/
             TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
             TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
             TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
@@ -408,7 +295,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    void displayAlert() {
+    boolean displayAlert() {
         try {
             AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
             alert.setTitle("Enter Time Quantum");
@@ -417,13 +304,43 @@ public class HomeActivity extends AppCompatActivity {
             alert.setView(in_tq);
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    tq = Integer.parseInt(in_tq.getText().toString());
-                    time_quantum.setText("Time Quantum : " + tq);
+                    try {
+                        tq = Integer.parseInt(in_tq.getText().toString());
+                        time_quantum.setText("Time Quantum : " + tq);
+                    } catch (NumberFormatException e) {
+                        noTQ();
+                        noTQexe = true;
+                    }
                 }
             });
             alert.show();
             editExecute();
         } catch (Exception e) {
+            Toast.makeText(this, "Enter Time quantum.", Toast.LENGTH_LONG).show();
         }
+        return noTQexe;
     }
+
+    boolean readPriority(Input[] input) {
+        boolean next = false;
+        try {
+            for (int i = 0; i < tr.getChildCount(); i++) {
+                int type = algoClass.getSelectedItemPosition();
+                ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
+                if (type == 6 || type == 7) {
+                    input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
+                }
+            }
+            next = true;
+        } catch (Exception e) {
+            Toast.makeText(this, "Priorities not entered.", Toast.LENGTH_LONG).show();
+            next = false;
+        }
+        return next;
+    }
+
+    private void noTQ() {
+        Toast.makeText(this, "Enter Time Quantum!", Toast.LENGTH_LONG).show();
+    }
+
 }

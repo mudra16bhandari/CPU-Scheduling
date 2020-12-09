@@ -16,18 +16,18 @@
                 android:id="@+id/sum_pro"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:layout_weight="20"
                 android:paddingBottom="5dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:layout_weight="20" />
+                android:paddingRight="15dp" />
 
             <TextView
                 android:id="@+id/sum_at"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -40,7 +40,7 @@
                 android:id="@+id/sum_bt"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -48,50 +48,12 @@
                 android:layout_weight="20"
                 android:inputType="number" />
 
-            <TextView
-                android:id="@+id/sum_io"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="20"
-                android:inputType="number"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/sum_bt2"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="20"
-                android:inputType="number"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/sum_tbt"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="20"
-                android:inputType="number"
-                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/sum_ct"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -104,7 +66,7 @@
                 android:id="@+id/sum_tat"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -117,7 +79,7 @@
                 android:id="@+id/sum_wt"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
@@ -131,7 +93,7 @@
                 android:id="@+id/sum_prior"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:paddingRight="5dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center"
