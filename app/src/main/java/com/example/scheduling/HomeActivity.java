@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView priority, time_quantum;
     TextView avgTurnAround;
     TextView avgWaiting;
-    int tq;
+    int tq = 2;
     boolean noTQexe = false;
 
     @Override
@@ -283,9 +283,6 @@ public class HomeActivity extends AppCompatActivity {
         for (int i = 0; i < tr.getChildCount(); i++) {
             int type = algoClass.getSelectedItemPosition();
             ConstraintLayout rowView = (ConstraintLayout) tr.getChildAt(i);
-            /*if (type == 6 || type == 7) {
-                input[i].setPriority(Integer.parseInt(((EditText) rowView.findViewById(R.id.sum_prior)).getText().toString()));
-            }*/
             TextView wt = (TextView) rowView.findViewById(R.id.sum_wt);
             TextView tat = (TextView) rowView.findViewById(R.id.sum_tat);
             TextView ct = (TextView) rowView.findViewById(R.id.sum_ct);
@@ -307,8 +304,11 @@ public class HomeActivity extends AppCompatActivity {
                     try {
                         tq = Integer.parseInt(in_tq.getText().toString());
                         time_quantum.setText("Time Quantum : " + tq);
+                        //System.out.println(tq);
+                        noTQexe = false;
                     } catch (NumberFormatException e) {
                         noTQ();
+                        time_quantum.setText("Time Quantum : " + tq);
                         noTQexe = true;
                     }
                 }
